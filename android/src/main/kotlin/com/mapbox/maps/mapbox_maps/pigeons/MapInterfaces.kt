@@ -106,7 +106,9 @@ enum class ViewportMode(val raw: Int) {
   /** Default viewport */
   DEFAULT(0),
   /** Viewport flipped on the y-axis. */
-  FLIPPED_Y(1);
+  FLIPPED_Y(1),
+  /** Viewport follow puck */
+  NAVIGATION(2);
 
   companion object {
     fun ofRaw(raw: Int): ViewportMode? {

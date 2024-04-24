@@ -4,13 +4,19 @@ import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
+import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
+import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
+import com.mapbox.maps.plugin.viewport.state.FollowPuckViewportState
+import com.mapbox.maps.plugin.viewport.viewport
 
-class MapInterfaceController(private val mapboxMap: MapboxMap, private val context: Context) : _MapInterface {
+class MapInterfaceController(private val mapboxMap: MapboxMap,private val mapView:MapView ,private val context: Context) : _MapInterface {
   override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
       styleURI,
@@ -88,7 +94,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
   }
 
   override fun setViewportMode(mode: ViewportMode) {
-    mapboxMap.setViewportMode(com.mapbox.maps.ViewportMode.values()[mode.ordinal])
+    if(mode === ViewportMode.NAVIGATION){
+      val viewportPlugin = mapView.viewport
+      val followPuckViewportState: FollowPuckViewportState = viewportPlugin.makeFollowPuckViewportState(
+        FollowPuckViewportStateOptions.Builder()
+          .bearing(FollowPuckViewportStateBearing.Constant(0.0))
+          .build());
+        viewportPlugin.transitionTo(followPuckViewportState)
+    }else{
+      mapboxMap.setViewportMode(com.mapbox.maps.ViewportMode.values()[mode.ordinal])
+    }
   }
 
   override fun getMapOptions(): MapOptions {

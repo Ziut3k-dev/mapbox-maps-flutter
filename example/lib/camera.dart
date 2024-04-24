@@ -324,6 +324,22 @@ class CameraPageBodyState extends State<CameraPageBody> {
     );
   }
 
+  Widget _lockCameraToPuck() {
+    return TextButton(
+      child: Text('lockCameraToPuck'),
+      onPressed: () {
+        mapboxMap?.location.updateSettings(LocationComponentSettings(
+            enabled: true,
+            locationPuck: LocationPuck(
+                locationPuck3D: LocationPuck3D(
+                    modelUri:
+                        "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+                    modelScale: [10, 10, 10]))));
+        mapboxMap?.setViewportMode(ViewportMode.NAVIGATION);
+      },
+    );
+  }
+
   Widget _setCamera() {
     return TextButton(
       child: Text('setCamera'),
@@ -419,6 +435,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
         _coordinateForPixel(),
         _coordinatesForPixels(),
         _setCamera(),
+        _lockCameraToPuck(),
         _getCameraState(),
         _setBounds(),
         _getBounds(),

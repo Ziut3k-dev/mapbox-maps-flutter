@@ -66,6 +66,9 @@ enum ViewportMode {
 
   /// Viewport flipped on the y-axis.
   FLIPPED_Y,
+
+  /// Viewport sticky to puck.
+  NAVIGATION
 }
 
 /// Describes the map orientation.
